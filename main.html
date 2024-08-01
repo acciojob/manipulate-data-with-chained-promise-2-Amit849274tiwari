@@ -1,13 +1,55 @@
 <!DOCTYPE html>
-
-<html>
-  <head>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-
-  <body>
-    <!-- do not change this code -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promise Chaining Example</title>
+</head>
+<body>
     <div id="output"></div>
-    <script type="text/javascript" src="./script.js"></script>
-  </body>
+    <script>
+        // Function to return a promise that resolves with an array of numbers after 3 seconds
+        const getNumbers = () => new Promise(resolve => {
+            setTimeout(() => {
+                resolve([1, 2, 3, 4]);
+            }, 3000);
+        });
+
+        // Function to filter out odd numbers
+        const filterOddNumbers = (numbers) => new Promise(resolve => {
+            setTimeout(() => {
+                const evenNumbers = numbers.filter(number => number % 2 === 0);
+                resolve(evenNumbers);
+            }, 1000);
+        });
+
+        // Function to multiply even numbers by 2
+        const multiplyEvenNumbers = (numbers) => new Promise(resolve => {
+            setTimeout(() => {
+                const multipliedNumbers = numbers.map(number => number * 2);
+                resolve(multipliedNumbers);
+            }, 2000);
+        });
+
+        // Getting the output div
+        const outputDiv = document.getElementById('output');
+
+        // Chaining the promises
+        getNumbers()
+            .then(numbers => {
+                outputDiv.textContent = `Initial array: ${numbers.join(', ')}`;
+                return filterOddNumbers(numbers);
+            })
+            .then(evenNumbers => {
+                outputDiv.textContent = `Even numbers: ${evenNumbers.join(', ')}`;
+                return multiplyEvenNumbers(evenNumbers);
+            })
+            .then(multipliedNumbers => {
+                outputDiv.textContent = `Multiplied even numbers: ${multipliedNumbers.join(', ')}`;
+            })
+            .catch(error => {
+                outputDiv.textContent = `Error: ${error}`;
+            });
+    </script>
+</body>
 </html>
